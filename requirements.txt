@@ -1,0 +1,67 @@
+# ==== FastAPI ====
+fastapi
+uvicorn[standard]
+
+# ==== LangChain / Graph / DeepAgents / OpenAI ====
+copilotkit
+deepagents
+langchain-community==0.3.17
+langchain-openai
+
+
+# ==== Configuración / Entorno ====
+python-dotenv
+pydantic==2.11.7
+pydantic-settings==2.10.1
+
+# ==== Web / Utilidades ====
+python-multipart
+PyJWT
+aiofiles
+httpx
+bcrypt
+requests
+
+# ==== Oracle ====
+oci
+oracledb
+
+# ==== Documentos / Imágenes ====
+PyMuPDF
+PyPDF2
+Pillow
+pandas
+numpy>=1.26
+python-magic
+pytesseract
+
+# ==== Excel / CSV / TSV ====
+openpyxl
+xlrd
+pyxlsb
+
+# ==== XML ====
+lxml>=5.2.1
+xmlschema>=3.3.1
+saxonche>=12.5.1
+
+
+# ==== MinerU y modelos de layout ====
+doclayout-yolo>=0.0.4
+ultralytics>=8.3.0,<9
+opencv-python-headless
+onnxruntime          # CPU
+rapid-table<2.0.0
+rapidocr>=2.0.0,<3.0.0
+tokenizers
+transformers
+ftfy
+shapely
+pyclipper
+omegaconf
+hf_xet
+sglang
+
+# ==== PyTorch (CPU/GPU auto) ====
+torch==2.5.1
+torchvision==0.20.1

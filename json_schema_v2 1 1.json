@@ -1,0 +1,102 @@
+{
+  "type": "object",
+  "properties": {
+    "identificacion_reclamacion": {
+      "type": "string",
+      "description": "Identificador de la reclamación"
+    },
+    "glosa_total": {
+      "type": "boolean",
+      "description": "Indica si hay alguna glosa total sobre la reclamación (true) o no (false). No incluye glosas parciales"
+    },
+    "justificacion": {
+      "type": "string",
+      "description": "Justificación general de la glosa total (si aplica)"
+    },
+    "clasificacion_glosas_totales": {
+      "type": "array",
+      "description": "Solo glosas totales de la reclamación que llevarían el valor reconocido a cero",
+      "items": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "Código de glosa"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción del tipo de glosa"
+          },
+          "justificacion": {
+            "type": "string",
+            "description": "Justificación específica por la que la reclamación se glosa totalmente"
+          },
+          "referencias": {
+            "type": "array",
+            "description": "Referencias a documentos (tanto de la reclamación como externos), factura xml, bases de datos u otras fuentes. Para los documentos pdf usar documento/pagina (Ejemplo ABCD1234.pdf/12)",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["codigo", "descripcion", "justificacion"]
+      }
+    },
+    "items_reclamados": {
+      "type": "array",
+      "description": "Lista de ítems de la reclamación",
+      "items": {
+        "type": "object",
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "description": "Código alfanumérico del ítem reclamado"
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre del ítem reclamado"
+          },
+          "glosa_parcial": {
+            "type": "boolean",
+            "description": "Indica si el ítem tiene glosa parcial (la cual solo glosa el ítem)"
+          },
+          "valor": {
+            "type": "number",
+            "description": "Valor del ítem"
+          },
+          "clasificacion_glosas": {
+            "type": "array",
+            "description": "Clasificaciones aplicadas a la glosa parcial (si el ítem tiene glosa parcial)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "codigo": {
+                  "type": "integer",
+                  "description": "Código de la glosa parcial"
+                },
+                "descripcion": {
+                  "type": "string",
+                  "description": "Descripción de la glosa parcial"
+                },
+                "justificacion": {
+                  "type": "string",
+                  "description": "Justificación específica de la glosa parcial aplicada al ítem"
+                },
+                "referencias": {
+                  "type": "array",
+                  "description": "Referencias a documentos (tanto de la reclamación como externos), factura xml, bases de datos u otras fuentes. Para los documentos pdf usar documento/pagina (Ejemplo ABCD1234.pdf/12)",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["codigo", "descripcion", "justificacion"]
+            }
+          }
+        },
+        "required": ["codigo", "nombre", "glosa_parcial", "valor"]
+      }
+    }
+  },
+  "required": ["identificacion_reclamacion", "glosa_total", "items_reclamados"]
+}

@@ -1,0 +1,82 @@
+
+Comandos útiles para revisar y gestionar recursos en Kubernetes
+===============================================================
+
+1. Ver todos los namespaces:
+   kubectl get namespaces
+
+2. Ver los services en un namespace (ejemplo: default):
+   kubectl get services -n default
+
+   o todos los services en todos los namespaces:
+   kubectl get services --all-namespaces
+
+3. Ver los pods en un namespace:
+   kubectl get pods -n default
+
+   Con más detalle de un pod:
+   kubectl describe pod <nombre-del-pod> -n default
+
+4. Ver los deployments:
+   kubectl get deployments -n default
+
+5. Ver los replicasets:
+   kubectl get rs -n default
+
+6. Ver todos los recursos de un namespace:
+   kubectl get all -n default
+
+7. Ver logs de un pod específico:
+   kubectl logs <nombre-del-pod> -n default
+
+   Si el pod tiene varios contenedores:
+   kubectl logs <nombre-del-pod> -c <nombre-del-contenedor> -n default
+
+---------------------------------------------------------------
+Gestión de Pods
+---------------------------------------------------------------
+- Reiniciar un pod (borrarlo para que el ReplicaSet/Deployment lo cree de nuevo):
+  kubectl delete pod <nombre-del-pod> -n <namespace>
+
+- Eliminar un pod específico:
+  kubectl delete pod <nombre-del-pod> -n <namespace>
+
+- Escalar un deployment (forzar recreación de pods al cambiar replicas):
+  kubectl scale deployment <nombre-del-deployment> --replicas=0 -n <namespace>
+  kubectl scale deployment <nombre-del-deployment> --replicas=1 -n <namespace>
+
+---------------------------------------------------------------
+Gestión de Namespaces
+---------------------------------------------------------------
+- Crear un namespace:
+  kubectl create namespace <nombre-namespace>
+
+- Eliminar un namespace:
+  kubectl delete namespace <nombre-namespace>
+
+---------------------------------------------------------------
+Despliegue de Manifiestos
+---------------------------------------------------------------
+- Aplicar un manifiesto (crear/actualizar recursos):
+  kubectl apply -f <archivo.yaml> -n <namespace>
+
+- Crear recursos desde un manifiesto (si no existen):
+  kubectl create -f <archivo.yaml> -n <namespace>
+
+- Eliminar recursos definidos en un manifiesto:
+  kubectl delete -f <archivo.yaml> -n <namespace>
+
+- Validar un manifiesto sin aplicarlo:
+  kubectl apply --dry-run=client -f <archivo.yaml> -n <namespace>
+
+---------------------------------------------------------------
+Gestion de nodos
+---------------------------------------------------------------
+- Ver todos los nodos y su estado
+   kubectl get nodes
+
+- Ver detalles extendidos de un nodo
+   kubectl describe node <nombre-del-nodo>
+
+- Ver recursos usados (CPU/Memoria) en los nodos
+   kubectl top nodes

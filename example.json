@@ -1,0 +1,48 @@
+{
+    "identificacion_reclamacion": "REC-2025-00123",
+    "glosa_total": true,
+    "justificacion": "La reclamación se glosa en su totalidad debido a inconsistencias entre los valores facturados y los reportados en el sistema.",
+    "clasificacion_glosas_totales": [
+        {
+            "codigo": "GT001",
+            "descripcion": "Factura duplicada",
+            "justificacion": "Se encontró que la factura ya había sido presentada en una radicación previa.",
+            "referencias": [
+                "FAC123456.pdf/3"
+            ]
+        },
+        {
+            "codigo": "GT002",
+            "descripcion": "Prestación sin cobertura",
+            "justificacion": "El servicio facturado no está dentro del plan de beneficios del paciente.",
+            "referencias": [
+                "FAC123456.xml",
+                "manual_prestaciones_2025.pdf/45"
+            ]
+        }
+    ],
+    "items_reclamados": [
+        {
+            "codigo": "ITM-001",
+            "nombre": "Consulta médica general",
+            "glosa_parcial": false,
+            "valor": 50000
+        },
+        {
+            "codigo": "ITM-002",
+            "nombre": "Radiografía odontológica",
+            "glosa_parcial": true,
+            "valor": 80000,
+            "clasificacion_glosas": [
+                {
+                    "codigo": "101",
+                    "descripcion": "Falta de soporte clínico",
+                    "justificacion": "No se adjuntó la historia clínica que justifique la orden de la radiografía.",
+                    "referencias": [
+                        "HISTORIA_CLINICA_2025.pdf/12"
+                    ]
+                }
+            ]
+        }
+    ]
+}

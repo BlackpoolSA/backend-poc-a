@@ -1,0 +1,48 @@
+{
+    "type": "object",
+    "properties": {
+      "identificacion_reclamacion": {
+        "type": "string"
+      },
+      "estado_glosa": {
+        "type": "boolean",
+        "description": "Indica si el documento está glosado (1) o no glosado (0)"
+      },
+      "justificacion": {
+        "type": "string",
+        "description": "Justificación de por qué es glosado (si aplica) que remite o referencia a uno de los documentos analizados"
+      },
+      "documentos_referenciados": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[^/]+/\\d+$",
+          "description": "Referencias a documentos en formato 'nombre_documento/pagina'"
+        },
+        "description": "Array de referencias estructuradas a los documentos analizados"
+      },
+      "clasificacion": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "codigo": {
+              "type": "integer",
+              "description": "Código numérico del tipo de glosa"
+            },
+            "descripcion": {
+              "type": "string",
+              "description": "Descripción del tipo de glosa"
+            }
+          },
+          "required": ["codigo", "descripcion"],
+          "description": "Objeto con código y descripción del tipo de glosa"
+        },
+        "description": "Array de objetos con códigos y descripciones de los tipos de glosa aplicables"
+      }
+    },
+    "required": [
+      "identificacion_reclamacion",
+      "estado_glosa"
+    ]
+  }

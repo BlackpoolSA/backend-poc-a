@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"  # Puerto directo del backend para acceso local
+    volumes:
+      - ./temp:/app/temp
+      - ./wallet:/app/wallet
+      - ./oci:/app/oci
+    networks:
+      - adres-network-local
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=local
+      - DEBUG=true
+
+networks:
+  adres-network-local:
+    driver: bridge

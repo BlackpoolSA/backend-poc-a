@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    restart: unless-stopped
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.httpchallenge=true
+      - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.myresolver.acme.email=ldavid.florez@outlook.es
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard (opcional)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_letsencrypt:/letsencrypt
+    networks:
+      - adres-network
+
+  backend:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./temp:/app/temp
+      - ./wallet:/app/wallet
+      - ./oci:/app/oci
+    networks:
+      - adres-network
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      # Redirige HTTP a HTTPS
+      - "traefik.http.routers.backend-http.rule=Host(`adresentelgy.online`)"
+      - "traefik.http.routers.backend-http.entrypoints=web"
+      - "traefik.http.routers.backend-http.middlewares=redirect-to-https@docker"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # HTTPS con Let's Encrypt
+      - "traefik.http.routers.backend.rule=Host(`adresentelgy.online`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.services.backend.loadbalancer.server.port=9000"
+
+volumes:
+  traefik_letsencrypt:
+
+networks:
+  adres-network:
+    external: true
