@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 # Configuración
-base_url = "http://159.112.150.232:8001"
+base_url = "http://159.112.146.57:8001"
 root = Path(__file__).parent
 in_file = root / "test_data" / "E54051224024325R001391884700.PDF"
 out_file = root / "result.zip"

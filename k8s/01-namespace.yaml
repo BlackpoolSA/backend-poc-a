@@ -1,8 +1,0 @@
-# Namespace para el backend de ADRES
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: backend
-  labels:
-    name: backend
-    app: adres-backend

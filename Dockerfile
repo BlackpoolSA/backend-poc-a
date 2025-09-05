@@ -16,11 +16,14 @@ COPY requirements.txt .
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copiar archivo de configuración de entorno
+# COPY .env .
+
 # Copiar el código de la aplicación
 COPY . .
 
-# Crear directorio para archivos temporales
-RUN mkdir -p temp
+# Crear directorios necesarios
+RUN mkdir -p temp wallet oci
 
 # Exponer puerto
 EXPOSE 9000

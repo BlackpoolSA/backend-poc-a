@@ -1,3 +1,21 @@
+# ============================================================================
+# MANIFEST COMBINADO PARA EL BACKEND DE ADRES
+# ============================================================================
+# Este archivo contiene todos los recursos de Kubernetes necesarios para
+# desplegar el backend de ADRES en un cluster de Kubernetes.
+# ============================================================================
+
+---
+# Namespace para el backend de ADRES
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend
+  labels:
+    name: backend
+    app: adres-backend
+
+---
 # Deployment del servicio adres-backend
 apiVersion: apps/v1
 kind: Deployment
@@ -24,9 +42,6 @@ spec:
         ports:
         - containerPort: 9000
           name: http
-        envFrom:
-        - secretRef:
-            name: adres-backend-secret
         resources:
           requests:
             memory: "16Gi"
@@ -57,21 +72,22 @@ spec:
           capabilities:
             drop:
             - ALL
-        # Volúmenes persistentes
-        volumeMounts:
-        - name: temp-volume
-          mountPath: /app/temp
-        - name: wallet-volume
-          mountPath: /app/wallet
-        - name: oci-volume
-          mountPath: /app/oci
-      volumes:
-      - name: temp-volume
-        persistentVolumeClaim:
-          claimName: adres-backend-temp-pvc
-      - name: wallet-volume
-        persistentVolumeClaim:
-          claimName: adres-backend-wallet-pvc
-      - name: oci-volume
-        persistentVolumeClaim:
-          claimName: adres-backend-oci-pvc
+
+---
+# Service para adres-backend
+apiVersion: v1
+kind: Service
+metadata:
+  name: adres-backend-service
+  namespace: backend
+  labels:
+    app: adres-backend
+spec:
+  selector:
+    app: adres-backend
+  ports:
+  - name: http
+    port: 9000       # Puerto expuesto en el LoadBalancer
+    targetPort: 9000 # Puerto interno del contenedor
+    protocol: TCP
+  type: LoadBalancer
