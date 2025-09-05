@@ -1,0 +1,59 @@
+# Deployment del servicio adres-backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adres-backend
+  namespace: backend
+  labels:
+    app: adres-backend
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adres-backend
+  template:
+    metadata:
+      labels:
+        app: adres-backend
+        version: v1
+    spec:
+      containers:
+      - name: adres-backend
+        image: <region>.ocir.io/<tenancy-namespace>/repo/adres-backend:latest # Imagen en OCI Registry
+        ports:
+        - containerPort: 9000
+          name: http
+        envFrom:
+        - secretRef:
+            name: adres-backend-secret
+        resources:
+          requests:
+            memory: "16Gi"
+            cpu: "4000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+        livenessProbe:
+          httpGet:
+            path: /sys/health
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /sys/health
+            port: 9000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        # Configuración de seguridad
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL

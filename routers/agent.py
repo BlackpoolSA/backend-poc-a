@@ -4,6 +4,7 @@ Router para el sistema de agentes de DeepAgents.
 
 import logging
 import json
+import time
 
 from typing import List, Optional
 from pathlib import Path
@@ -185,6 +186,9 @@ async def glosa_endpoint(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ):
     """Procesa archivos y ejecuta auditoría."""
+    # Iniciar timing completo del request
+    request_start_time = time.time()
+    
     try:
         security_authenticate_user("/agent/glosa", credentials)
 
@@ -339,11 +343,28 @@ async def glosa_endpoint(
                 logger.info(
                     f"[DEEP_AGENTS][GLOSA] Auditoría médica completada exitosamente"
                 )
-                return audit_result
+                
+                # Calcular tiempo total del request
+                total_request_time = time.time() - request_start_time
+                
+                # Agregar tiempo total del request a la respuesta
+                if hasattr(audit_result, 'dict'):
+                    # Si es un objeto Pydantic, convertir a dict y agregar el campo
+                    result_dict = audit_result.dict()
+                    result_dict['total_request_time_seconds'] = total_request_time
+                    return result_dict
+                elif isinstance(audit_result, dict):
+                    # Si ya es un dict, agregar directamente
+                    audit_result['total_request_time_seconds'] = total_request_time
+                    return audit_result
+                else:
+                    # Fallback: retornar el resultado original
+                    return audit_result
 
             except Exception as audit_error:
+                total_request_time = time.time() - request_start_time
                 logger.error(
-                    f"[DEEP_AGENTS][GLOSA] Error en auditoría médica: {str(audit_error)}"
+                    f"[DEEP_AGENTS][GLOSA] Error en auditoría médica: {str(audit_error)} (Tiempo total: {total_request_time:.2f}s)"
                 )
                 raise HTTPException(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -352,8 +373,9 @@ async def glosa_endpoint(
 
         # Si no se encontró upload.md, devolver error
         if not upload_md_content:
+            total_request_time = time.time() - request_start_time
             logger.warning(
-                "[DEEP_AGENTS][GLOSA] No se encontró upload.md - no se puede ejecutar auditoría"
+                f"[DEEP_AGENTS][GLOSA] No se encontró upload.md - no se puede ejecutar auditoría (Tiempo total: {total_request_time:.2f}s)"
             )
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -363,7 +385,8 @@ async def glosa_endpoint(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"[DEEP_AGENTS][GLOSA] Error en glosa: {str(e)}")
+        total_request_time = time.time() - request_start_time
+        logger.error(f"[DEEP_AGENTS][GLOSA] Error en glosa: {str(e)} (Tiempo total: {total_request_time:.2f}s)")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error en glosa: {str(e)}",

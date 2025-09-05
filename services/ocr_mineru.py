@@ -221,21 +221,15 @@ def _call_ocr_api(input_path: Path) -> tuple[str, dict]:
     logger.info(f"[OCR][API] Iniciando llamada al servicio OCR externo... [START]")
 
     try:
-        # Preparar los datos para la API
-        files = {"file": (input_path.name, open(input_path, "rb"), "application/pdf")}
-
-        data = {
-            "vram_limit": settings.OCR_VRAM_LIMIT,
-            "concurrency": settings.OCR_CONCURRENCY,
-            "per_worker_mb": settings.OCR_PER_WORKER_MB,
-        }
-
-        # Realizar la llamada a la API
-        response = requests.post(
-            settings.OCR_SERVICE_URL,
-            files=files,
-            data=data,
-        )
+        # Preparar los datos para la API - formato simplificado
+        with open(input_path, "rb") as f:
+            files = {"file": f}
+            
+            # Realizar la llamada a la API
+            response = requests.post(
+                settings.OCR_SERVICE_URL,
+                files=files,
+            )
 
         if response.status_code != 200:
             raise RuntimeError(

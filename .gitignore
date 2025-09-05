@@ -220,3 +220,8 @@ wallet/
 
 # OCI
 oci/
+
+# Temporal data
+test_data/
+temp/
+*.zip

@@ -97,9 +97,6 @@ class Settings(BaseSettings):
     # ============================================================================
     OCR_TEMP_DIR: str = "temp"
     OCR_SERVICE_URL: str = "http://159.112.137.0:8001/ocr"
-    OCR_VRAM_LIMIT: int = 40960
-    OCR_CONCURRENCY: int = 10
-    OCR_PER_WORKER_MB: int = 768
   
     # ============================================================================
     # CONFIGURACIÓN DE ARCHIVOS

@@ -1,0 +1,17 @@
+# Service para adres-backend
+apiVersion: v1
+kind: Service
+metadata:
+  name: adres-backend-service
+  namespace: backend
+  labels:
+    app: adres-backend
+spec:
+  selector:
+    app: adres-backend
+  ports:
+  - name: http
+    port: 9000       # Puerto expuesto en el LoadBalancer
+    targetPort: 9000 # Puerto interno del contenedor
+    protocol: TCP
+  type: LoadBalancer
