@@ -1,0 +1,48 @@
+# PersistentVolumeClaims para el backend de ADRES
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adres-backend-temp-pvc
+  namespace: backend
+  labels:
+    app: adres-backend
+    type: temp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adres-backend-wallet-pvc
+  namespace: backend
+  labels:
+    app: adres-backend
+    type: wallet
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: manual
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adres-backend-oci-pvc
+  namespace: backend
+  labels:
+    app: adres-backend
+    type: oci
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: manual

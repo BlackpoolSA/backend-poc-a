@@ -57,3 +57,21 @@ spec:
           capabilities:
             drop:
             - ALL
+        # Volúmenes persistentes
+        volumeMounts:
+        - name: temp-volume
+          mountPath: /app/temp
+        - name: wallet-volume
+          mountPath: /app/wallet
+        - name: oci-volume
+          mountPath: /app/oci
+      volumes:
+      - name: temp-volume
+        persistentVolumeClaim:
+          claimName: adres-backend-temp-pvc
+      - name: wallet-volume
+        persistentVolumeClaim:
+          claimName: adres-backend-wallet-pvc
+      - name: oci-volume
+        persistentVolumeClaim:
+          claimName: adres-backend-oci-pvc
